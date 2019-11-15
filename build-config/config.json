@@ -1,0 +1,17 @@
+{
+    "buildCommands": [
+        "npm install",
+        "pm2 stop base_service",
+        "pm2 start scripts/start.js --name \"base_service\""
+    ],
+    "autoConfig": [
+        {
+            "template": "start.js",
+            "destFile": "scripts/start.js"
+        },
+        {
+            "template": "config.js",
+            "destFile": "src/config.js"
+        }
+    ]
+}
