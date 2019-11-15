@@ -1,6 +1,10 @@
 {
     "buildCommands": [
+        "rm -rf ./node_modules/sonorpc",
+        "rm -rf ./node_modules/sonorpc-mysql",
         "npm install",
+        "ln -s /data/common/sonorpc ./node_modules/sonorpc",
+        "ln -s /data/common/sonorpc-mysql ./node_modules/sonorpc-mysql",
         "pm2 stop base_service",
         "pm2 start scripts/start.js --name \"base_service\""
     ],
