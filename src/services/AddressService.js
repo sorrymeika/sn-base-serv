@@ -1,11 +1,9 @@
 const { Service } = require('sonorpc');
 
-const { PARAM_ERROR } = require('../constants/error');
-
 class AddressService extends Service {
 
     async addProvince({ provinceName, provinceCode }) {
-        const res = await this.ctx.mysql.insert('province', {
+        const res = await this.app.mysql.insert('province', {
             name: provinceName,
             areaCode: provinceCode
         });
@@ -13,7 +11,7 @@ class AddressService extends Service {
     }
 
     async addCity({ cityName, cityCode, provinceId, provinceCode }) {
-        const res = await this.ctx.mysql.insert('city', {
+        const res = await this.app.mysql.insert('city', {
             name: cityName,
             areaCode: cityCode,
             provinceId,
@@ -23,7 +21,7 @@ class AddressService extends Service {
     }
 
     async addDistrict({ districtName, districtCode, cityId, cityCode }) {
-        const res = await this.ctx.mysql.insert('district', {
+        const res = await this.app.mysql.insert('district', {
             name: districtName,
             areaCode: districtCode,
             cityId,
@@ -33,27 +31,27 @@ class AddressService extends Service {
     }
 
     async getProvinces() {
-        const rows = await this.ctx.mysql.query('select id,name,areaCode from province');
+        const rows = await this.app.mysql.query('select id,name,areaCode from province');
         return { success: true, code: 0, data: rows };
     }
 
     async getCitiesByProvinceId(provinceId) {
-        const rows = await this.ctx.mysql.query('select id,name,areaCode,initial from city where provinceId=@p0', [provinceId]);
+        const rows = await this.app.mysql.query('select id,name,areaCode,initial from city where provinceId=@p0', [provinceId]);
         return { success: true, code: 0, data: rows };
     }
 
     async getCitiesByProvinceCode(provinceCode) {
-        const rows = await this.ctx.mysql.query('select id,name,areaCode,initial from city where provinceCode=@p0', [provinceCode]);
+        const rows = await this.app.mysql.query('select id,name,areaCode,initial from city where provinceCode=@p0', [provinceCode]);
         return { success: true, code: 0, data: rows };
     }
 
     async getDistrictsByCityId(cityId) {
-        const rows = await this.ctx.mysql.query('select id,name,areaCode from district where cityId=@p0', [cityId]);
+        const rows = await this.app.mysql.query('select id,name,areaCode from district where cityId=@p0', [cityId]);
         return { success: true, code: 0, data: rows };
     }
 
     async getDistrictsByCityCode(cityCode) {
-        const rows = await this.ctx.mysql.query('select id,name,areaCode from district where cityCode=@p0', [cityCode]);
+        const rows = await this.app.mysql.query('select id,name,areaCode from district where cityCode=@p0', [cityCode]);
         return { success: true, code: 0, data: rows };
     }
 
@@ -63,7 +61,7 @@ class AddressService extends Service {
         }
 
         const params = districtCodes.map((code, i) => `@p${i}`);
-        const rows = await this.ctx.mysql.query(`select 
+        const rows = await this.app.mysql.query(`select 
             a.id,a.name as districtName,a.areaCode as districtCode,a.cityCode,
             b.name as cityName,
             c.areaCode as provinceCode,c.name as provinceName
@@ -76,7 +74,7 @@ class AddressService extends Service {
     }
 
     async getAreaInfoByDistrictCode(districtCode) {
-        const rows = await this.ctx.mysql.query(
+        const rows = await this.app.mysql.query(
             `select 
             a.id,a.name as districtName,a.areaCode as districtCode,a.cityCode,
             b.name as cityName,
