@@ -15,7 +15,7 @@
         },
         {
             "template": "config.js",
-            "destFile": "src/config.js"
+            "destFile": "app/config.js"
         }
     ]
 }
